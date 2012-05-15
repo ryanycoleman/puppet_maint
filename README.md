@@ -11,23 +11,23 @@ Through a single parameterized class (puppet_maint), you may turn on and configu
 * Master FileBucket
 
 ### Parameters
-  $tidy\_reports -- Whether to remove old reports 
+  $tidy_reports -- Whether to remove old reports 
 
  * Accepts boolean true or false (defaults to false)  
 
-  $tidy\_master\_filebucket -- Whether to remove old content from the master filebucket
+  $tidy_master_filebucket -- Whether to remove old content from the master filebucket
 
  * Accepts boolean true or false (defaults to false)
   
-  $tidy\_client\_filebucket -- Whether to remove old content form the client filebucket  
+  $tidy_client_filebucket -- Whether to remove old content form the client filebucket  
 
 * Accepts boolean true or false (defaults to false)
 
-  $max\_report\_age -- Maximum accepted report age
+  $max_report_age -- Maximum accepted report age
 
 * Accepts a string based on the below criteria (defaults to '4w')
 
-  $max\_filebucket\_age -- Maximum accepted age for bucket content 
+  $max_filebucket_age -- Maximum accepted age for bucket content 
 
 * Accepts a string based on the below criteria (defaults to '4w')
 
@@ -45,11 +45,11 @@ Criteria for age variable values (from Tidy):
 
 In the simplest use, you'd declare the class in site.pp for all of your agents.
 <pre>
-class { 'puppet\_maint':
-  tidy\_reports => true,
+class { 'puppet_maint':
+  tidy_reports => true,
   tidy_master_filebucket => true,
-  max\_report\_age => '4w',
-  max\_filebucket\_age => '2w',
+  max_report_age => '4w',
+  max_filebucket_age => '2w',
 }
 </pre>
 
@@ -68,3 +68,10 @@ This module requires puppetlabs-stdlib for the puppet_vardir fact which makes th
 * Way of determining agent vs master roles without PE specific facts
 * Extra stuff that you're thinking about
   * Keep in mind that the interface should be simple boolean triggers, defaulting to not purging files from a system.
+* Ability to purge console reports
+
+### Contribution Process
+1. Branch
+2. Code & Document
+3. Pull Request
+4. Profit
