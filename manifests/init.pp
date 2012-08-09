@@ -1,9 +1,11 @@
 /*
 Through a single parameterized class (puppet_maint), you may turn on and configure maintenance of the following items:  
 
-* Puppet Reports
+* Puppet Reports (on disk)
 * Client FileBucket
 * Master FileBucket
+* Puppet Reports (console db)
+* Optimizing the console db
 
 ### Parameters
   $tidy_reports -- Whether to remove old reports 
@@ -15,6 +17,14 @@ Through a single parameterized class (puppet_maint), you may turn on and configu
  * Accepts boolean true or false (defaults to false)
 
   $tidy_client_filebucket -- Whether to remove old content form the client filebucket  
+
+* Accepts boolean true or false (defaults to false)
+
+  $prune_report_db -- Whether to remove old reports from the Console db
+
+* Accepts boolean true or false (defaults to false)
+
+  $optimize_report_db -- Whether to optimize the reports db once a month
 
 * Accepts boolean true or false (defaults to false)
 
@@ -37,6 +47,8 @@ class puppet_maint (
   $tidy_reports = false,
   $tidy_master_filebucket = false,
   $tidy_client_filebucket = false,
+  $prune_report_db = false,
+  $optimize_report_db = false,
   $max_report_age = '4w',
   $max_filebucket_age = '4w',
 ) {
@@ -79,6 +91,23 @@ class puppet_maint (
       rmdirs  => true,
     }
 
+  }
+
+  if $puppet_maint::prune_report_db {
+    cron { 'prune':
+      command => '/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production reports:prune upto=1 unit=mon',
+      user    => 'root',
+      hour    => '3',
+      minute  => '5',
+    }
+  }
+
+  if $puppet_maint::optimize_report_db {
+    cron { 'optimize':
+      command  => '/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production db:raw:optimize',
+      user     => 'root',
+      monthday => '1',
+    }
   }
 
 }
