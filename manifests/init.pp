@@ -42,6 +42,11 @@ Criteria for age variable values (from Tidy):
     the specified time.  You can choose seconds, minutes,
     hours, days, or weeks by specifying the first letter of any
     of those words (e.g., '1w').
+
+  $max_report_db_age_in_weeks -- Maximum accepted age for reports in the db
+
+* Accepts a string representing number of weeks (defaults to '4')
+
 */
 class puppet_maint (
   $tidy_reports = false,
@@ -96,7 +101,7 @@ class puppet_maint (
 
   if $puppet_maint::prune_report_db {
     cron { 'prune':
-      command => "/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production reports:prune upto=${max_report_db_age_in_weeks} unit=mon",
+      command => "/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production reports:prune upto=${max_report_db_age_in_weeks} unit=wk",
       user    => 'root',
       hour    => '3',
       minute  => '5',
