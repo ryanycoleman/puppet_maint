@@ -68,8 +68,8 @@ class puppet_maint (
   if $puppet_maint::tidy_reports {
 
     tidy { 'tidy_puppet_reports':
-      path    => "${puppet_vardir}/reports",
-      age     => $max_report_age,
+      path    => "${::puppet_vardir}/reports",
+      age     => $puppet_maint::max_report_age,
       recurse => true,
       rmdirs  => true,
       matches => '*.yaml',
@@ -80,8 +80,8 @@ class puppet_maint (
   if $puppet_maint::tidy_master_filebucket {
 
     tidy { 'tidy_master_filebucket':
-      path    => "${puppet_vardir}/bucket",
-      age     => $puppet_maint::max_report_age,
+      path    => "${::puppet_vardir}/bucket",
+      age     => $puppet_maint::max_filebucket_age,
       recurse => true,
       rmdirs  => true,
     }
@@ -92,7 +92,7 @@ class puppet_maint (
 
     tidy { 'tidy_client_filebucket':
       path    => "${puppet_vardir}/clientbucket",
-      age     => $puppet_maint::max_report_age,
+      age     => $puppet_maint::max_filebucket_age,
       recurse => true,
       rmdirs  => true,
     }
@@ -101,7 +101,7 @@ class puppet_maint (
 
   if $puppet_maint::prune_report_db {
     cron { 'prune':
-      command => "/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production reports:prune upto=${max_report_db_age_in_weeks} unit=wk",
+      command => "/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production reports:prune upto=${puppet_maint::max_report_db_age_in_weeks} unit=wk",
       user    => 'root',
       hour    => '3',
       minute  => '5',
